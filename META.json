@@ -1,10 +1,10 @@
 {
-   "abstract" : "unknown",
+   "abstract" : "Lisp-style dynamic restarts",
    "author" : [
       "Lukas Mai <l.mai@web.de>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.64, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "ExtUtils::MakeMaker version 7, CPAN::Meta::Converter version 2.142690",
    "license" : [
       "perl_5"
    ],
@@ -22,28 +22,42 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "Test::More" : "0"
+            "ExtUtils::MakeMaker" : "0"
          }
       },
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "6.56"
+            "ExtUtils::MakeMaker" : "6.56",
+            "strict" : "0",
+            "warnings" : "0"
          }
       },
       "runtime" : {
          "requires" : {
             "Carp" : "0",
+            "Exporter::Tiny" : "0",
             "Moo" : "0",
             "Return::MultiLevel" : "0",
             "Scope::OnExit::Wrap" : "0",
-            "Sub::Exporter" : "0",
+            "parent" : "0",
             "perl" : "5.006000",
             "strict" : "0",
             "warnings" : "0"
          }
+      },
+      "test" : {
+         "requires" : {
+            "Test::More" : "0"
+         }
       }
    },
    "release_status" : "stable",
-   "resources" : {},
-   "version" : "0.01"
+   "resources" : {
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/mauke/Worlogog-Restart.git",
+         "web" : "https://github.com/mauke/Worlogog-Restart"
+      }
+   },
+   "version" : "0.02"
 }

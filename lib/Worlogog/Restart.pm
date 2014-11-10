@@ -3,97 +3,94 @@ package Worlogog::Restart;
 use warnings;
 use strict;
 
-our $VERSION = '0.01';
-
-use Sub::Exporter -setup => {
-	exports => [
-		qw(
-			case
-			bind
-			invoke
-			find
-			compute
-		)
-	],
-};
+our $VERSION = '0.02';
 
 use Carp qw(croak);
 use Scope::OnExit::Wrap qw(on_scope_exit);
 use Return::MultiLevel qw(with_return);
 
+use parent 'Exporter::Tiny';
+our @EXPORT_OK = qw(
+    case
+    bind
+    invoke
+    find
+    compute
+);
+
 our @restarts;
 
 sub bind (&$) {
-	my ($body, $handlers) = @_;
-	my $limit = @restarts;
-	my $guard = on_scope_exit { splice @restarts, $limit };
-	push @restarts, \%$handlers;
-	$body->()
+    my ($body, $handlers) = @_;
+    my $limit = @restarts;
+    my $guard = on_scope_exit { splice @restarts, $limit };
+    push @restarts, \%$handlers;
+    $body->()
 }
 
 sub case (&$) {
-	my ($body, $handlers) = @_;
-	my $limit = @restarts;
-	my $guard = on_scope_exit { splice @restarts, $limit };
-	my $wantlist = wantarray;
-	my @v = with_return {
-		my ($return) = @_;
-		push @restarts, {
-			map {
-				my $v = $handlers->{$_};
-				$_ => sub { $return->($v, @_) }
-			} keys %$handlers
-		};
-		unless (defined $wantlist) {
-			$body->();
-			return;
-		}
-		undef, $wantlist ? $body->() : scalar $body->()
-	};
-	if (my $f = shift @v) {
-		return $f->(@v);
-	}
-	$wantlist ? @v : $v[0]
+    my ($body, $handlers) = @_;
+    my $limit = @restarts;
+    my $guard = on_scope_exit { splice @restarts, $limit };
+    my $wantlist = wantarray;
+    my @v = with_return {
+        my ($return) = @_;
+        push @restarts, {
+            map {
+                my $v = $handlers->{$_};
+                $_ => sub { $return->($v, @_) }
+            } keys %$handlers
+        };
+        unless (defined $wantlist) {
+            $body->();
+            return;
+        }
+        undef, $wantlist ? $body->() : scalar $body->()
+    };
+    if (my $f = shift @v) {
+        return $f->(@v);
+    }
+    $wantlist ? @v : $v[0]
 }
 
 sub _find {
-	my ($k) = @_;
-	for my $rs (reverse @restarts) {
-		my $v = $rs->{$k};
-		return $v if $v;
-	}
-	undef
+    my ($k) = @_;
+    for my $rs (reverse @restarts) {
+        my $v = $rs->{$k};
+        return $v if $v;
+    }
+    undef
 }
 
 sub invoke {
-	my $proto = shift;
-	my $code = ref $proto ? $proto->code : _find($proto) || croak qq{No restart named "$proto" is active};
-	$code->(@_)
+    my $proto = shift;
+    my $code = ref $proto ? $proto->code : _find($proto) || croak qq{No restart named "$proto" is active};
+    $code->(@_)
 }
 
 sub find {
-	my ($name) = @_;
-	my $code = _find($name) or return undef;
-	require Worlogog::Restart::Restart;
-	Worlogog::Restart::Restart->new(
-		name => $name,
-		code => $code,
-	)
+    my ($name) = @_;
+    my $code = _find($name) or return undef;
+    require Worlogog::Restart::Restart;
+    Worlogog::Restart::Restart->new(
+        name => $name,
+        code => $code,
+    )
 }
 
 sub compute {
-	my @r;
-	for my $rs (reverse @restarts) {
-		for my $k (sort keys %$rs) {
-			my $v = $rs->{$k};
-			require Worlogog::Restart::Restart;
-			push @r, Worlogog::Restart::Restart->new(
-				name => $k,
-				code => $v,
-			);
-		}
-	}
-	@r
+    my @r;
+    for my $rs (reverse @restarts) {
+        for my $k (sort keys %$rs) {
+            my $v = $rs->{$k};
+            require Worlogog::Restart::Restart;
+            push @r, Worlogog::Restart::Restart->new(
+                name => $k,
+                code => $v,
+            );
+        }
+    }
+    @r
 }
 
 'ok'
@@ -227,12 +224,12 @@ they're shadowed by a more recent restart with the same name:
 
 =back
 
-This module uses L<C<Sub::Exporter>|Sub::Exporter>, so you can rename the
+This module uses L<C<Exporter::Tiny>|Exporter::Tiny>, so you can rename the
 imported functions at L<C<use>|perlfunc/use> time.
 
 =head1 SEE ALSO
 
-L<Sub::Exporter>, L<Return::MultiLevel>
+L<Exporter::Tiny>, L<Return::MultiLevel>
 
 =head1 AUTHOR
 
@@ -240,7 +237,7 @@ Lukas Mai, C<< <l.mai at web.de> >>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2013 Lukas Mai.
+Copyright 2013, 2014 Lukas Mai.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published
