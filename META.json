@@ -4,7 +4,7 @@
       "Lukas Mai <l.mai@web.de>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 7, CPAN::Meta::Converter version 2.142690",
+   "generated_by" : "ExtUtils::MakeMaker version 7.02, CPAN::Meta::Converter version 2.143240",
    "license" : [
       "perl_5"
    ],
@@ -36,7 +36,6 @@
          "requires" : {
             "Carp" : "0",
             "Exporter::Tiny" : "0",
-            "Moo" : "0",
             "Return::MultiLevel" : "0",
             "Scope::OnExit::Wrap" : "0",
             "parent" : "0",
@@ -59,5 +58,5 @@
          "web" : "https://github.com/mauke/Worlogog-Restart"
       }
    },
-   "version" : "0.02"
+   "version" : "0.03"
 }

@@ -10,7 +10,7 @@ configure_requires:
   strict: '0'
   warnings: '0'
 dynamic_config: 1
-generated_by: 'ExtUtils::MakeMaker version 7, CPAN::Meta::Converter version 2.142690'
+generated_by: 'ExtUtils::MakeMaker version 7.02, CPAN::Meta::Converter version 2.143240'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -23,7 +23,6 @@ no_index:
 requires:
   Carp: '0'
   Exporter::Tiny: '0'
-  Moo: '0'
   Return::MultiLevel: '0'
   Scope::OnExit::Wrap: '0'
   parent: '0'
@@ -32,4 +31,4 @@ requires:
   warnings: '0'
 resources:
   repository: git://github.com/mauke/Worlogog-Restart.git
-version: '0.02'
+version: '0.03'
